@@ -8,12 +8,28 @@ namespace CSharpPracticum.Menu
     {
         private List<ITask> GetTasks(int level)
         {
-            return Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsClass && typeof(ITask).IsAssignableFrom(t) && t.Namespace == $"CSharpPracticum.Tasks.Level{level}").Select(t => (ITask)Activator.CreateInstance(t)!).ToList();
+            List<ITask> tasks = new List<ITask>();
+
+            var types = Assembly.GetExecutingAssembly().GetTypes();
+
+            foreach (var type in types)
+            {
+                if (type.IsClass &&
+                    typeof(ITask).IsAssignableFrom(type) &&
+                    type.Namespace == $"CSharpPracticum.Tasks.Level{level}")
+                {
+                    ITask task = (ITask)Activator.CreateInstance(type)!;
+
+                    tasks.Add(task);
+                }
+            }
+
+            return tasks;
         }
         public void Show(int level)
         {
             
-        
+
             switch (level)
             {
                 case 1:
@@ -40,9 +56,9 @@ namespace CSharpPracticum.Menu
                     else if (!int.TryParse(choiceEasy, out int number) || number < 1 || number > tasksEasy.Count)
                     {
                         Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Red;
+                        
                         Console.WriteLine("Вы выбрали недопустимое значение. Выберите от 1-15.\n");
-                        Console.ResetColor();
+                        
 
                         goto case 1;
                     }
