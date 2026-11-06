@@ -20,7 +20,7 @@ namespace CSharpPracticum.Tasks.Level1
             long longnum = 1234567890123456789;
             double doublenum = 12.3;
             float floatnub = 12.3f;
-            decimal decimalnub = 123;
+            decimal decimalnub = 123m;
             bool boolnub = true;
             char chartxt = 'x';
             string srtingtxt = "qwerty";
