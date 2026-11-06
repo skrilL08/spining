@@ -18,10 +18,10 @@ namespace CSharpPracticum.Tasks.Level1
         public void Run()
         {
             Console.WriteLine("Введите число Х: ");
-            double x = Convert.ToDouble(Console.ReadLine());
+            double x = double.Parse(Console.ReadLine());
 
             Console.WriteLine("Введите число Y: ");
-            double y = Convert.ToDouble(Console.ReadLine());
+            double y = double.Parse(Console.ReadLine());
 
             Console.WriteLine("Введите Действие (+, -, *, /): ");
             String z = Console.ReadLine();
