@@ -14,3 +14,15 @@
 
 ### What I learned
 A merge conflict occurs when branches change the same lines. After editing out the conflict markers, staging the file and committing completes the merge.
+
+## Task 35 — .gitignore, .editorconfig, PR and rebase
+
+### Commands
+- Added the required ignore patterns and editor settings in a separate commit.
+
+
+- Created feature/task-35 and recorded the task implementation commits.
+
+
+- Prepared the three git-notes commits for interactive squash.
+
