@@ -8,12 +8,32 @@ namespace CSharpPracticum.Menu
     {
         private List<ITask> GetTasks(int level)
         {
-            return Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsClass && typeof(ITask).IsAssignableFrom(t) && t.Namespace == $"CSharpPracticum.Tasks.Level{level}").Select(t => (ITask)Activator.CreateInstance(t)!).ToList();
+            List<ITask> tasks = new List<ITask>();
+
+            var types = Assembly.GetExecutingAssembly().GetTypes();
+
+            foreach (var type in types)
+            {
+                if (type.IsClass &&
+                    typeof(ITask).IsAssignableFrom(type) &&
+                    type.Namespace == $"CSharpPracticum.Tasks.Level{level}")
+                {
+                    ITask task = (ITask)Activator.CreateInstance(type)!;
+
+                    tasks.Add(task);
+                }
+            }
+
+            return tasks.OrderBy(task =>
+            {
+                string number = new string(task.Title.Where(char.IsDigit).ToArray());
+                return int.TryParse(number, out int value) ? value : int.MaxValue;
+            }).ToList();
         }
         public void Show(int level)
         {
             
-        
+
             switch (level)
             {
                 case 1:
@@ -40,9 +60,9 @@ namespace CSharpPracticum.Menu
                     else if (!int.TryParse(choiceEasy, out int number) || number < 1 || number > tasksEasy.Count)
                     {
                         Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Red;
+                        
                         Console.WriteLine("Вы выбрали недопустимое значение. Выберите от 1-15.\n");
-                        Console.ResetColor();
+                        
 
                         goto case 1;
                     }
@@ -76,7 +96,7 @@ namespace CSharpPracticum.Menu
 
                     for (int i = 0; i < tasksMedium.Count; i++)
                     {
-                        Console.WriteLine($"{i + 1}. {tasksMedium[i].Title.Replace($"Задание {i + 1}: ", "")}");
+                        Console.WriteLine($"{i + 16}. {tasksMedium[i].Title}");
                     }
 
                     Console.WriteLine("\n0. Назад");
@@ -88,11 +108,11 @@ namespace CSharpPracticum.Menu
                         Console.Clear();
                         MenuRunner.Start();
                     }
-                    else if (!int.TryParse(choiceMedium, out int number) || number < 1 || number > tasksMedium.Count)
+                    else if (!int.TryParse(choiceMedium, out int number) || number < 16 || number >= 16 + tasksMedium.Count)
                     {
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Вы выбрали недопустимое значение. Выберите от 1-19.\n");
+                        Console.WriteLine("Вы выбрали недопустимое значение. Выберите задание от 16 до 34.\n");
                         Console.ResetColor();
 
                         goto case 2;
@@ -101,7 +121,7 @@ namespace CSharpPracticum.Menu
                     else
                     {
                         Console.Clear();
-                        ITask selectedTask = tasksMedium[number - 1];
+                        ITask selectedTask = tasksMedium[number - 16];
 
                         TaskInfoAttribute.Show(selectedTask);
 
