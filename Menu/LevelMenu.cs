@@ -24,11 +24,21 @@ namespace CSharpPracticum.Menu
                 }
             }
 
-            return tasks.OrderBy(task =>
-            {
-                string number = new string(task.Title.Where(char.IsDigit).ToArray());
-                return int.TryParse(number, out int value) ? value : int.MaxValue;
-            }).ToList();
+            return tasks.OrderBy(task => GetTaskNumber(task.Title)).ToList();
+        }
+
+        private static int GetTaskNumber(string title)
+        {
+            string[] parts = title.Split(' ', 3, StringSplitOptions.RemoveEmptyEntries);
+            return parts.Length > 1 && int.TryParse(parts[1].TrimEnd(':', '.'), out int number)
+                ? number
+                : int.MaxValue;
+        }
+
+        private static string GetTaskName(string title)
+        {
+            string[] parts = title.Split(' ', 3, StringSplitOptions.RemoveEmptyEntries);
+            return parts.Length == 3 ? parts[2] : title;
         }
         public void Show(int level)
         {
@@ -43,7 +53,7 @@ namespace CSharpPracticum.Menu
 
                     for (int i = 0; i < tasksEasy.Count; i++)
                     {
-                        Console.WriteLine($"{i+1}. {tasksEasy[i].Title.Replace($"Задание {i+1}: ", "")}");
+                        Console.WriteLine($"{i + 1}. {GetTaskName(tasksEasy[i].Title)}");
                     }
 
                     Console.WriteLine("\n0. Назад");
@@ -96,7 +106,7 @@ namespace CSharpPracticum.Menu
 
                     for (int i = 0; i < tasksMedium.Count; i++)
                     {
-                        Console.WriteLine($"{i + 16}. {tasksMedium[i].Title}");
+                        Console.WriteLine($"{i + 16}. {GetTaskName(tasksMedium[i].Title)}");
                     }
 
                     Console.WriteLine("\n0. Назад");
@@ -146,7 +156,7 @@ namespace CSharpPracticum.Menu
 
                     for (int i = 0; i < taskshard.Count; i++)
                     {
-                        Console.WriteLine($"{i + 1}. {taskshard[i].Title.Replace($"Задание {i + 1}: ", "")}");
+                        Console.WriteLine($"{i + 36}. {GetTaskName(taskshard[i].Title)}");
                     }
 
                     Console.WriteLine("\n0. Назад");
@@ -158,11 +168,11 @@ namespace CSharpPracticum.Menu
                         Console.Clear();
                         MenuRunner.Start();
                     }
-                    else if (!int.TryParse(choiceHard, out int number) || number < 1 || number > taskshard.Count)
+                    else if (!int.TryParse(choiceHard, out int number) || number < 36 || number >= 36 + taskshard.Count)
                     {
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Вы выбрали недопустимое значение. Выберите от 1-14.\n");
+                        Console.WriteLine("Вы выбрали недопустимое значение. Выберите задание от 36 до 50.\n");
                         Console.ResetColor();
 
                         goto case 3;
@@ -171,7 +181,7 @@ namespace CSharpPracticum.Menu
                     else
                     {
                         Console.Clear();
-                        ITask selectedTask = taskshard[number - 1];
+                        ITask selectedTask = taskshard[number - 36];
 
                         TaskInfoAttribute.Show(selectedTask);
 
