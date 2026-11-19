@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CSharpPracticum.Tests\**\*.cs" />
     <Folder Include="Tasks\Level3\" />
     <Folder Include="Tasks\Level2\" />
   </ItemGroup>
