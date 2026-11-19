@@ -1,0 +1,102 @@
+﻿namespace CSharpPracticum.Tasks.Level2
+{
+    internal interface IShape
+    {
+        double Area();
+        double Perimeter();
+    }
+
+    internal class Circle : IShape
+    {
+        private readonly double radius;
+
+        public Circle(double r)
+        {
+            radius = r;
+        }
+
+        public double Area() => Math.PI * radius * radius;
+
+        public double Perimeter() => 2 * Math.PI * radius;
+
+        public override string ToString() => "Круг";
+    }
+
+    internal class Rectangle : IShape
+    {
+        private readonly double width;
+        private readonly double height;
+
+        public Rectangle(double w, double h)
+        {
+            width = w;
+            height = h;
+        }
+
+        public double Area() => width * height;
+
+        public double Perimeter() => 2 * (width + height);
+
+        public override string ToString() => "Прямоугольник";
+    }
+
+    internal class Triangle : IShape
+    {
+        private readonly double sideA;
+        private readonly double sideB;
+        private readonly double sideC;
+
+        public Triangle(double a, double b, double c)
+        {
+            sideA = a;
+            sideB = b;
+            sideC = c;
+        }
+
+        public double Perimeter() => sideA + sideB + sideC;
+
+        public double Area()
+        {
+            double p = Perimeter() / 2;
+            return Math.Sqrt(p * (p - sideA) * (p - sideB) * (p - sideC));
+        }
+
+        public override string ToString() => "Треугольник";
+    }
+
+    internal class Task25_Shapes : ITask
+    {
+        public string Title => "Задание 25: Интерфейс IShape и сортировка фигур";
+        public string Description => "Посчитать характеристики фигур и упорядочить их по площади.";
+        public string[] Requirements =>
+            new[]
+            {
+                "IShape.Area и Perimeter.",
+                "Circle, Rectangle и Triangle.",
+                "Список из 5+ фигур отсортировать по площади и показать до и после.",
+            };
+
+        public void Run()
+        {
+            List<IShape> s = new()
+            {
+                new Circle(2),
+                new Rectangle(2, 3),
+                new Triangle(3, 4, 5),
+                new Circle(1),
+                new Rectangle(4, 5),
+            };
+            Console.WriteLine("До:");
+            foreach (var x in s)
+            {
+                Console.WriteLine($"{x}: {x.Area():F2}");
+            }
+            s.Sort((a, b) => a.Area().CompareTo(b.Area()));
+            Console.WriteLine("После:");
+            foreach (var x in s)
+            {
+                Console.WriteLine($"{x}: {x.Area():F2}");
+            }
+        }
+    }
+}
