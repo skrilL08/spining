@@ -17,7 +17,7 @@ namespace CSharpPracticum.Menu
             Console.Write("Выберите уровень (1-4): ");
             var choice = (Console.ReadLine());
             LevelMenu levelMenu = new LevelMenu();
-            
+
             if (choice == "4" || Convert.ToString(choice) == "q" || int.Parse(choice) == 0)
             {
                 Console.WriteLine("Выход из программы.");
@@ -30,6 +30,7 @@ namespace CSharpPracticum.Menu
                 MenuRunner.Start();
             }
 
+            Console.Clear();
             levelMenu.Show(int.Parse(choice));
         }
     }
